@@ -1,0 +1,27 @@
+---
+- name: Running python application
+  hosts: fedora1
+  become: true
+
+  tasks:
+  - name: Copying python code to hosts
+    copy:
+      src: app.py
+      dest: /home/dev/
+  - name: Installing  pip
+    dnf:
+      name: python3-pip
+      state: present
+  - name: Installing flask
+    dnf:
+      name: python3-flask
+      state: present
+
+  - name: Installing nohup
+    dnf:
+      name: coreutils
+      state: present
+
+  - name: Running python application remotely
+    shell: "nohup python3 -m flask --app app run --host 0.0.0.0 --port 80 2>&1 &"
+
